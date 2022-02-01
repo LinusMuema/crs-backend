@@ -19,7 +19,7 @@ Once cloned, install the dependencies using the following command:
 And yes, we are using [yarn](https://yarnpkg.com/) as our package manager. _Reason: It uses emojis ..._ 😆
 
 > To run the project, you will need to have the .env variables which are ignored by default. They are secrets and passwords used to access third party services used in the app. 
->
-> Ask @linusmuema for the file.
+
+Ask @LinusMuema for the file.
 
 Once done, the application will be deployed on heroku.
