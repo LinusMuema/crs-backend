@@ -1,6 +1,5 @@
 # 🚧 Work in progress 🚧
 
-# CRS Backend
 This is the backend service for the crs application. All the data is stored in a MongoDB database. The application is built on top of the [Express](https://expressjs.com/) framework. 
 
 The system architecture follows a simple MVC pattern. The application is divided into three main parts:
