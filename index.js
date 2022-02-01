@@ -30,7 +30,7 @@ app.listen(process.env.PORT || 2400, async () => {
         console.log(`server started : ${process.env.PORT}`)
 
         //Database config
-        const options = {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: true}
+        const options = { useNewUrlParser: true, useUnifiedTopology: true }
         await mongoose.connect(process.env.MONGODB_URL || uri, options)
         console.log('Connected to DB successfully')
     } catch (e) { console.log(e) }
