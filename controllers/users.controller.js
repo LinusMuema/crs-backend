@@ -4,7 +4,7 @@ const { error } = require('../utils/response');
 
 exports.getProfile = async (req, res) => {
     try {
-        const user = await User.findById(req.user._id);
+        const user = await User.findById(req._id);
         res.status(200).json(user);
     } catch (e) { error(res, 500, e.message); }
 }
