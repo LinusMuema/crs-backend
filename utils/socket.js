@@ -4,4 +4,3 @@ const singleton = (() => {
     return this
 })();
 
-module.exports = singleton
