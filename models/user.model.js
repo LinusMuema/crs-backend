@@ -7,6 +7,7 @@ const schema = new mongoose.Schema({
     email: String,
     username: String,
     password: String,
+    fcm_token: String,
     avatar: { type: String, default: image_url },
 })
 
