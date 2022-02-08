@@ -33,6 +33,7 @@ exports.getVehicles = async (req, res) => {
 
 exports.requestVehicle = async (req, res) => {
     try {
+        // TODO: send notification to vehicle owner
         const request = await new Request(req.body).save();
         res.status(201).json(request);
     } catch (e) { error(res, 500, e.message); }
