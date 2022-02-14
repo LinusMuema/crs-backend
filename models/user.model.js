@@ -19,8 +19,7 @@ const schema = new mongoose.Schema({
 
 schema.pre('save', async (next) => {
     if (this.isNew){
-        const hash = await bcrypt.hashPassword(this.password)
-        this.password = hash;
+        this.password = await bcrypt.hashPassword(this.password);
     }
     next();
 })
