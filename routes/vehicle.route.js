@@ -7,6 +7,8 @@ router.put('/', middleware.verify, controller.updateVehicle);
 
 router.post('/', middleware.verify, controller.createVehicle);
 
+router.post('/nearby', middleware.verify, controller.getNearby);
+
 router.post('/search', middleware.verify, controller.getVehicles);
 
 router.put('/request', middleware.verify, controller.updateRequest);

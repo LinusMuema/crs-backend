@@ -1,3 +1,4 @@
+const User = require('../models/user.model');
 const Request = require('../models/request.model');
 const Vehicle = require('../models/vehicle.model');
 
@@ -24,38 +25,41 @@ exports.updateVehicle = async (req, res) => {
 
 exports.getVehicles = async (req, res) => {
     try {
-        let vehicles;
         const body = req.body;
+        const vehicles = await Vehicle.find({
+            make: body.make,
+            available: true,
+            to: {$lte: body.to},
+            from: {$gte: body.from},
+            model: {$regex: body.model, $options: 'i'}
+        });
+        res.status(200).json(vehicles);
+    } catch (e) {
+        error(res, 500, e.message);
+    }
+}
 
-        // if there is no make specified, get 20 random vehicles
-        // otherwise, get all vehicles that match the make
-        if (body.make === '') {
-            const items = await Vehicle.aggregate([
-                {$unwind: '$user'},
-                {$sample: {size: 20}},
-                {$match: {available: true}},
-                {
-                    $lookup: {
-                        from: 'users',
-                        localField: 'user',
-                        foreignField: '_id',
-                        as: 'user'
-                    }
-                },
-            ]);
-            vehicles = items.map(v => {
-                v.user = v.user[0];
-                return v;
-            })
-        } else {
-            vehicles = await Vehicle.find({
-                make: body.make,
-                available: true,
-                to: {$lte: body.to},
-                from: {$gte: body.from},
-                model: {$regex: body.model, $options: 'i'}
-            });
-        }
+exports.getNearby = async (req, res) => {
+    try {
+        const lat = req.body.lat;
+        const lng = req.body.lng;
+
+        const users = await User.find({
+            location: {
+                $near: {
+                    $geometry: {
+                        type: 'Point',
+                        coordinates: [lng, lat]
+                    },
+                    $minDistance: 0,
+                    $maxDistance: 500000
+                }
+            }
+        });
+
+        const ids = users.map(u => u._id).filter(id => id !== req._id.toString());
+        const vehicles = await Vehicle.find({ user: { $in: ids }, available: true });
+
         res.status(200).json(vehicles);
     } catch (e) {
         error(res, 500, e.message);
