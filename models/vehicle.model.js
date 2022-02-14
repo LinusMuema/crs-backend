@@ -4,12 +4,12 @@ const makes = ['toyota', 'jeep', 'bmw', 'audi', 'mazda', 'ford', 'honda', 'nissa
 const schema = new mongoose.Schema({
     to: Date,
     from: Date,
-    plate: String,
     model: String,
     color: String,
     available: Boolean,
     description: String,
     images: [{ type: String }],
+    plate: {type: String, unique: true},
     make: { type: String, enum: makes },
     user: { type: mongoose.Schema.Types.ObjectId,  ref: 'User'},
 }, { timestamps: true });
