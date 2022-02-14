@@ -5,6 +5,7 @@ const {error} = require('../utils/response');
 
 exports.createVehicle = async (req, res) => {
     try {
+        req.body.user = req._id;
         const vehicle = await new Vehicle(req.body).save();
         res.status(201).json(vehicle);
     } catch (e) {

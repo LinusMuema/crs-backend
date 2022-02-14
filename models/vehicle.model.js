@@ -6,11 +6,11 @@ const schema = new mongoose.Schema({
     from: Date,
     model: String,
     color: String,
-    available: Boolean,
     description: String,
     images: [{ type: String }],
     plate: {type: String, unique: true},
     make: { type: String, enum: makes },
+    available: { type: Boolean, default: false },
     user: { type: mongoose.Schema.Types.ObjectId,  ref: 'User'},
 }, { timestamps: true });
 
