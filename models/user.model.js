@@ -17,7 +17,7 @@ const schema = new mongoose.Schema({
     avatar: { type: String, default: image_url },
 })
 
-schema.pre('save', async (next) => {
+schema.pre('save', async function (next){
     if (this.isNew){
         this.password = await bcrypt.hashPassword(this.password);
     }
