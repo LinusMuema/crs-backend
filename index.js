@@ -27,28 +27,11 @@ const uri = 'mongodb://localhost/crs';
 
 app.listen(process.env.PORT || 2400, async () => {
     try {
-
-        import { initializeApp } from "firebase/app";
-        import { getAnalytics } from "firebase/analytics";
-        const firebaseConfig = {
-            apiKey: "AIzaSyAj_ee_RJC6mwqP_S_VH-LyFXQRRlPCR4g",
-            authDomain: "frbse-auth-254.firebaseapp.com",
-            databaseURL: "https://frbse-auth-254.firebaseio.com",
-            projectId: "frbse-auth-254",
-            storageBucket: "frbse-auth-254.appspot.com",
-            messagingSenderId: "40865980664",
-            appId: "1:40865980664:web:8316ac9a3a1cfb482e5b0d",
-            measurementId: "G-ZB1LFKWYRV"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-
-        console.log(`server started : ${process.env.PORT}`)
+        console.log(`server started : ${process.env.PORT}`);
 
         //Database config
-        const options = { useNewUrlParser: true, useUnifiedTopology: true }
-        await mongoose.connect(process.env.MONGODB_URL || uri, options)
+        const options = { useNewUrlParser: true, useUnifiedTopology: true };
+        await mongoose.connect(process.env.MONGODB_URL || uri, options);
         console.log('Connected to DB successfully')
     } catch (e) { console.log(e) }
 })
