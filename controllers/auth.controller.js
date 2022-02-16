@@ -1,7 +1,8 @@
-const User = require("../models/user.model");
-const bcrypt = require("../utils/bcrypt");
-const { error } = require("../utils/response");
-const { generateToken } = require("../utils/jwt");
+const bcrypt = require('../utils/bcrypt');
+const User = require('../models/user.model');
+
+const { error } = require('../utils/response');
+const { generateToken } = require('../utils/jwt');
 
 exports.signUp = async (req, res) => {
     try {
@@ -17,10 +18,10 @@ exports.login = async (req, res) => {
     try {
         const body = req.body;
         const user = await User.findOne({ email: body.email });
-        if (!user) return error(res, 404, "user not found");
+        if (!user) return error(res, 404, 'user not found');
 
         const matches = await bcrypt.verifyPassword(body.password, user.password);
-        if (!matches) return error(res, 403, "wrong password");
+        if (!matches) return error(res, 403, 'wrong password');
 
         const token = await generateToken(user._id);
         res.status(200).json({token, user});

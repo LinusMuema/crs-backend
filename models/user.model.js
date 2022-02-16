@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const mongoose = require('mongoose');
 const bcrypt = require('../utils/bcrypt');
 const image_url = 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y'
@@ -12,7 +13,7 @@ const schema = new mongoose.Schema({
         unique: true
     },
     location: {
-        coordinates: { type: [Number]},
+        coordinates: { type: [Number], default: [0, 0] },
         type: { type: String, enum: ['Point'], default: 'Point' }
     },
     username: String,
@@ -26,6 +27,7 @@ schema.index({ location: '2dsphere' });
 schema.pre('save', async function (next){
     if (this.isNew){
         this.password = await bcrypt.hashPassword(this.password);
+        this.username = crypto.randomBytes(8).toString('hex');
     }
     next();
 })
