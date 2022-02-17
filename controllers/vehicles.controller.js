@@ -29,6 +29,17 @@ exports.updateVehicle = async (req, res) => {
 
 exports.getVehicles = async (req, res) => {
     try {
+        const vehicles = await Vehicle.find({user: req._id})
+            .populate('user');
+
+        res.status(200).json(vehicles);
+    } catch (e) {
+        error(res, 500, e.message);
+    }
+}
+
+exports.searchVehicles = async (req, res) => {
+    try {
         const body = req.body;
         const vehicles = await Vehicle.find({
             make: body.make,
