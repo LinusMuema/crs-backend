@@ -8,6 +8,8 @@ exports.createVehicle = async (req, res) => {
     try {
         req.body.user = req._id;
         const vehicle = await new Vehicle(req.body).save();
+        await vehicle.populate('user');
+
         res.status(201).json(vehicle);
     } catch (e) {
         error(res, 500, e.message);
@@ -16,7 +18,9 @@ exports.createVehicle = async (req, res) => {
 
 exports.updateVehicle = async (req, res) => {
     try {
-        const vehicle = await Vehicle.findByIdAndUpdate(req.body.id, req.body, {new: true});
+        const vehicle = await Vehicle.findByIdAndUpdate(req.body.id, req.body, {new: true})
+            .populate('user');
+
         res.status(200).json(vehicle);
     } catch (e) {
         error(res, 500, e.message);
@@ -32,7 +36,7 @@ exports.getVehicles = async (req, res) => {
             to: {$lte: body.to},
             from: {$gte: body.from},
             model: {$regex: body.model, $options: 'i'}
-        });
+        }).populate('user');
         res.status(200).json(vehicles);
     } catch (e) {
         error(res, 500, e.message);
@@ -58,7 +62,8 @@ exports.getNearby = async (req, res) => {
         });
 
         const ids = users.map(u => u._id).filter(id => id !== req._id.toString());
-        const vehicles = await Vehicle.find({ user: { $in: ids }, available: true });
+        const vehicles = await Vehicle.find({user: {$in: ids}, available: true})
+            .populate('user');
 
         res.status(200).json(vehicles);
     } catch (e) {
@@ -70,6 +75,9 @@ exports.requestVehicle = async (req, res) => {
     try {
         // TODO: send notification to vehicle owner
         const request = await new Request(req.body).save();
+        await request.populate('user');
+        await request.populate('vehicle');
+
         res.status(201).json(request);
     } catch (e) {
         error(res, 500, e.message);
@@ -78,7 +86,10 @@ exports.requestVehicle = async (req, res) => {
 
 exports.getRequests = async (req, res) => {
     try {
-        const requests = await Request.find({vehicle: req.params.id}).populate('user');
+        const requests = await Request.find({vehicle: req.params.id})
+            .populate('user')
+            .populate('vehicle');
+
         res.status(200).json(requests);
     } catch (e) {
         error(res, 500, e.message);
@@ -88,7 +99,9 @@ exports.getRequests = async (req, res) => {
 exports.updateRequest = async (req, res) => {
     try {
         // TODO: send notification to requesting user
-        const request = await Request.findByIdAndUpdate(req.params.id, req.body, {new: true});
+        const request = await Request.findByIdAndUpdate(req.params.id, req.body, {new: true})
+            .populate('user')
+            .populate('vehicle');
         res.status(200).json(request);
     } catch (e) {
         error(res, 500, e.message);
