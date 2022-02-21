@@ -72,7 +72,7 @@ exports.getNearby = async (req, res) => {
             }
         });
 
-        const ids = users.map(u => u._id).filter(id => id !== req._id.toString());
+        const ids = users.map(u => u._id).filter(id => id.toString() !== req._id.toString());
         const vehicles = await Vehicle.find({user: {$in: ids}, available: true})
             .populate('user');
 
