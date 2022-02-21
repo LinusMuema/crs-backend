@@ -8,6 +8,7 @@ const schema = new mongoose.Schema({
     color: String,
     description: String,
     images: [{ type: String }],
+    rate: { type: Number, default: 0 },
     plate: {type: String, unique: true},
     make: { type: String, enum: makes },
     available: { type: Boolean, default: false },
