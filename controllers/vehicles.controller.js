@@ -74,7 +74,13 @@ exports.getNearby = async (req, res) => {
 
         const ids = users.map(u => u._id).filter(id => id.toString() !== req._id.toString());
         const vehicles = await Vehicle.find({user: {$in: ids}, available: true})
-            .populate('user');
+            .populate('user')
+            .lean();
+
+        vehicles.forEach(v => {
+            const user = users.find(u => u._id.toString() === v.user._id.toString());
+            v.location = user.location;
+        });
 
         res.status(200).json(vehicles);
     } catch (e) {
