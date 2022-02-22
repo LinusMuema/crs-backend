@@ -89,7 +89,7 @@ exports.requestVehicle = async (req, res) => {
         const request = await new Request(req.body).save();
 
         await request.populate('client');
-        await request.populate('vehicle');
+        await request.populate({'path': 'vehicle', populate: {path: 'user'}});
         await Vehicle.findByIdAndUpdate(request.vehicle._id, {$set: {available: false}});
 
         res.status(201).json(request);
@@ -102,7 +102,7 @@ exports.getRequests = async (req, res) => {
     try {
         const requests = await Request.find({vehicle: req.body.id})
             .populate('client')
-            .populate('vehicle');
+            .populate({'path': 'vehicle', populate: {path: 'user'}});
 
         res.status(200).json(requests);
     } catch (e) {
@@ -115,7 +115,7 @@ exports.updateRequest = async (req, res) => {
         // TODO: send notification to requesting user
         const request = await Request.findByIdAndUpdate(req.body.request, req.body, {new: true})
             .populate('client')
-            .populate('vehicle');
+            .populate({'path': 'vehicle', populate: {path: 'user'}});
 
         if (req.body.status === 'rejected')
             await Vehicle.findByIdAndUpdate(request.vehicle._id, {$set: {available: true}});
@@ -131,11 +131,10 @@ exports.updateLocation = async (req, res) => {
         const items = req.body.locations;
         const filtered = [...new Set(items.map(JSON.stringify))].map(JSON.parse);
         const locations = filtered.map(l => ({type: 'Point', coordinates: [l[0], l[1]]}));
-        console.log(locations);
 
         const vehicle = await Request.findByIdAndUpdate(req.body.request, {$push: {locations}}, {new: true})
             .populate('client')
-            .populate('vehicle');
+            .populate({'path': 'vehicle', populate: {path: 'user'}});
 
         res.status(200).json(vehicle);
     } catch (e) {
