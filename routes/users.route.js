@@ -7,4 +7,6 @@ router.get('/', middleware.verify, controller.getProfile);
 
 router.put('/', middleware.verify, controller.updateProfile);
 
+router.get('/requests', middleware.verify, controller.getRequests);
+
 module.exports = router;
