@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const status = ['pending', 'accepted', 'collected', 'returned', 'rejected'];
+const status = ['pending', 'accepted', 'collected', 'completed', 'rejected'];
 
 const schema = new mongoose.Schema({
     to: Date,
