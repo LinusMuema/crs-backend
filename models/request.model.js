@@ -4,11 +4,11 @@ const status = ['pending', 'accepted', 'collected', 'completed', 'rejected'];
 
 const schema = new mongoose.Schema({
     to: Date,
-    end: Date,
     from: Date,
-    start: Date,
     locations: [],
     message: String,
+    end: {type: Date, default: Date.now},
+    start: {type: Date, default: Date.now},
     status: {type: String, enum: status, default: 'pending'},
     client: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     vehicle: {type: mongoose.Schema.Types.ObjectId, ref: 'Vehicle'},
