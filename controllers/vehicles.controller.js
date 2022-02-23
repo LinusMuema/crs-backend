@@ -117,9 +117,6 @@ exports.updateRequest = async (req, res) => {
             .populate('client')
             .populate({'path': 'vehicle', populate: {path: 'user'}});
 
-        if (req.body.status === 'rejected')
-            await Vehicle.findByIdAndUpdate(request.vehicle._id, {$set: {available: true}});
-
         res.status(200).json(request);
     } catch (e) {
         error(res, 500, e.message);
